@@ -1,53 +1,52 @@
 #include "sort.h"
 
 /**
- * insertion_sort_list - Sorts a doubly linked list of integers
- *                       in ascending order using Insertion Sort.
- * @list: Pointer to the head of the list to be sorted.
- */
+  * insertion_sort_list - Sorts an doubly linked list
+  * of integers in ascending order using
+  * the Insertion sort algorithm.
+  * @list: The doubly linked list to sort
+  *
+  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current;
+	bool flag = false;
+	listint_t *tmp = NULL, *aux = NULL;
 
 	if (!list || !(*list) || !(*list)->next)
 		return;
 
-	current = *list;
-	while (current->next)
+	tmp = *list;
+	while (tmp->next)
 	{
-		if (current->n > current->next->n)
+		if (tmp->n > tmp->next->n)
 		{
-			listint_t *temp = current->next;
-
-			if (current->prev)
-				current->prev->next = temp;
+			tmp->next->prev = tmp->prev;
+			if (tmp->next->prev)
+				tmp->prev->next = tmp->next;
 			else
-				*list = temp;
-			current->next = temp->next;
-			if (temp->next)
-				temp->next->prev = current;
-			temp->next = current;
-			temp->prev = current->prev;
-			current->prev = temp;
-			current = (temp->prev) ? temp->prev : temp;
-			print_list(*list);
-			while (current->prev && current->prev->n > current->n)
-			{
-				listint_t *prev = current->prev;
+				*list = tmp->next;
 
-				prev->next = current->next;
-				if (current->next)
-					current->next->prev = prev;
-				current->next = prev;
-				current->prev = prev->prev;
-				prev->prev = current;
-				if (current->prev)
-					current->prev->next = current;
-				current = (current->prev) ? current->prev : current;
-				print_list(*list);
+			tmp->prev = tmp->next;
+			tmp->next = tmp->next->next;
+			tmp->prev->next = tmp;
+			if (tmp->next)
+				tmp->next->prev = tmp;
+
+			tmp = tmp->prev;
+			print_list(*list);
+
+			if (tmp->prev && tmp->prev->n > tmp->n)
+			{
+				if (!flag)
+					aux = tmp->next;
+				flag = true;
+				tmp = tmp->prev;
+				continue;
 			}
 		}
+		if (!flag)
+			tmp = tmp->next;
 		else
-			current = current->next;
+			tmp = aux, flag = false;
 	}
 }
