@@ -2,7 +2,7 @@
 
 /**
  * insertion_sort_list - Sorts a doubly linked list of integers
- *                       in ascending order using the Insertion Sort algorithm.
+ *                       in ascending order using Insertion Sort.
  * @list: Pointer to the head of the list to be sorted.
  */
 void insertion_sort_list(listint_t **list)
@@ -16,13 +16,42 @@ void insertion_sort_list(listint_t **list)
     {
         if (current->n > current->next->n)
         {
-            swap_nodes(current, &(current->next));
+            listint_t *temp = current->next;
+
+            if (current->prev)
+                current->prev->next = temp;
+            else
+                *list = temp;
+
+            current->next = temp->next;
+            if (temp->next)
+                temp->next->prev = current;
+
+            temp->next = current;
+            temp->prev = current->prev;
+            current->prev = temp;
+
+            current = (temp->prev) ? temp->prev : temp;
+
             print_list(*list);
-            current = current->prev;
+
             while (current->prev && current->prev->n > current->n)
             {
-                if (!swap_nodes(current->prev, &(current)))
-                    break;
+                listint_t *prev = current->prev;
+                prev->next = current->next;
+
+                if (current->next)
+                    current->next->prev = prev;
+
+                current->next = prev;
+                current->prev = prev->prev;
+
+                prev->prev = current;
+                if (current->prev)
+                    current->prev->next = current;
+
+                current = (current->prev) ? current->prev : current;
+
                 print_list(*list);
             }
         }
@@ -31,32 +60,4 @@ void insertion_sort_list(listint_t **list)
             current = current->next;
         }
     }
-}
-
-/**
- * swap_nodes - Swaps two nodes in a doubly linked list.
- * @left: Pointer to the left node to swap.
- * @right: Pointer to the right node to swap.
- *
- * Return: 1 on success, 0 on failure.
- */
-int swap_nodes(listint_t *left, listint_t **right)
-{
-    if (!left || !(*right))
-        return 0;
-
-    listint_t *tmp = *right;
-    if (left->prev)
-        left->prev->next = tmp;
-    if (tmp->next)
-        tmp->next->prev = left;
-
-    left->next = tmp->next;
-    tmp->prev = left->prev;
-    left->prev = tmp;
-    tmp->next = left;
-
-    *right = tmp;
-
-    return 1;
 }
