@@ -2,53 +2,36 @@
 
 /**
  * insertion_sort_list - Sorts a doubly linked list of integers
- *                       in ascending order using Insertion sort.
- * @list: A pointer to a pointer to the head of the list
- *
- * Description: This function sorts a doubly linked list of integers
- *              in ascending order using the Insertion sort algorithm.
- *              It prints the list after each time two elements are swapped.
+ *                       in ascending order using insertion sort.
+ * @list: Pointer to the head of the list to be sorted.
  */
 void insertion_sort_list(listint_t **list)
 {
     if (list == NULL || *list == NULL || (*list)->next == NULL)
         return;
 
-    listint_t *sorted = NULL
-    listint_t *current = *list;
+    listint_t *current = (*list)->next;
 
     while (current != NULL)
     {
-        listint_t *next = current->next;
+        listint_t *temp = current->prev;
+        int key = current->n;
 
-        if (sorted == NULL || current->n < sorted->n)
+        while (temp != NULL && temp->n > key)
         {
-            current->next = sorted;
-            current->prev = NULL;
+            temp->next->n = temp->n;
+            temp = temp->prev;
+        }
 
-            if (sorted != NULL)
-                sorted->prev = current;
-
-            sorted = current;
+        if (temp == NULL)
+        {
+            (*list)->n = key;
         }
         else
         {
-            listint_t *tmp = sorted;
-
-            while (tmp->next != NULL && tmp->next->n < current->n)
-                tmp = tmp->next;
-
-            current->next = tmp->next;
-
-            if (tmp->next != NULL)
-                tmp->next->prev = current;
-
-            tmp->next = current;
-            current->prev = tmp;
+            temp->next->n = key;
         }
 
-        current = next;
+        current = current->next;
     }
-
-    *list = sorted;
 }
