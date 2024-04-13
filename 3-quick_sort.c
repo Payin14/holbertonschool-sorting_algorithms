@@ -2,11 +2,10 @@
 
 /**
   * quick_sort - Sorts an array of integers in ascending order
-  *              using the Quick Sort algorithm.
+  * using the Quick Sort algorithm.
   * @array: Pointer to the first element of the array to be sorted.
   * @size: Number of elements in the array.
   *
-  * Return: Nothing!
   */
 void quick_sort(int *array, size_t size)
 {
@@ -17,14 +16,14 @@ void quick_sort(int *array, size_t size)
 }
 
 /**
-  * quick_sort_rec - Recursively sorts a subarray of integers in ascending order
-  *                  using the Quick Sort algorithm.
+  * quick_sort_rec - Recursively sorts a subarray of integers in
+  * ascending order.
+  * using the Quick Sort algorithm.
   * @array: Pointer to the first element of the array to be sorted.
   * @lo: Index of the lower bound of the subarray.
   * @hi: Index of the higher bound of the subarray.
   * @size: Number of elements in the array.
   *
-  * Return: Nothing!
   */
 void quick_sort_rec(int *array, int lo, int hi, size_t size)
 {
